@@ -1,6 +1,17 @@
 import Layout from '../../components/layout';
-import { getAllPostIds } from '../../lib/posts';
+import { getAllPostIds, getPostData } from '../../lib/posts';
 
+// fetch necessary data for the post with id
+export async function getStaticProps({ params }) {
+  const postData = getPostData(params.id);
+  return {
+    props: {
+      postData,
+    },
+  };
+}
+
+// return an array of possible values for id
 export async function getStaticPaths() {
   const paths = getAllPostIds();
   return {
@@ -9,6 +20,15 @@ export async function getStaticPaths() {
   };
 }
 
-export default function Post() {
-  return <Layout>...</Layout>;
+// React component to render this page
+export default function Post({ postData }) {
+  return (
+    <Layout>
+      {postData.title}
+      <br />
+      {postData.id}
+      <br />
+      {postData.date}
+    </Layout>
+  );
 }
